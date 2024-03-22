@@ -122,6 +122,17 @@ def delete_from_cart():
         return jsonify({'message': 'Product removed from cart successfully'}), 200
     else:
         return jsonify({'error': 'Product not found in the cart'}), 404
+    
+@app.route('/search_product', methods=['GET'])
+def search_product():
+    query = request.args.get('query')
+    if not query:
+        return jsonify({'error': 'No search query provided'}), 400
+
+    # Perform case-insensitive search in product names and descriptions
+    results = [p for p in products if query.lower() in p['name'].lower() or query.lower() in p['description'].lower()]
+    
+    return jsonify(results)
 
 print(carts)
 if __name__ == '__main__':
